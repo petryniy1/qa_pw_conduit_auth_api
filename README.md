@@ -34,7 +34,7 @@ In this task you need to create test cases for the [Conduit](https://conduit.mat
 3. Create test for the `Profile` operatons:
 - *Read profile of not existing user*
 - *Read profile of existing user with empty auth header*
-3. Use the already created tests as examples.
+4. Use the already created tests as examples.
 
 ## Task Reporting
 

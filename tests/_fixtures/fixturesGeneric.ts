@@ -1,18 +1,17 @@
 import { test as base } from '@playwright/test';
 import { Logger } from '../../src/common/logger/Logger';
-import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
 import * as allure from 'allure-js-commons';
 import { parseTestTreeHierarchy } from '../../src/common/helpers/allureHelpers';
 
 export const test = base.extend<
   {
-    usersNumber;
-    contextsNumber;
-    infoTestLog;
-    addAllureTestHierarchy;
+    usersNumber: number;
+    contextsNumber: number;
+    infoTestLog: string;
+    addAllureTestHierarchy: string;
   },
   {
-    logger;
+    logger: Logger;
   }
 >({
   logger: [
@@ -23,10 +22,15 @@ export const test = base.extend<
     },
     { scope: 'worker' },
   ],
+  usersNumber: [1, { option: true }],
+  contextsNumber: [1, { option: true }],
   infoTestLog: [
     async ({ logger }, use, testInfo) => {
-      const indexOfTestSubfolderStart = testInfo.file.indexOf('/tests') + 7;
-      const fileName = testInfo.file.substring(indexOfTestSubfolderStart);
+      const normalizedFile = testInfo.file.replace(/\\/g, '/');
+      const testsMarker = '/tests/';
+      const idx = normalizedFile.indexOf(testsMarker);
+      const fileName =
+        idx >= 0 ? normalizedFile.substring(idx + testsMarker.length) : testInfo.file;
 
       logger.info(`Test started: ${fileName}`);
 
